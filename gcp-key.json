@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "custom-unison-443618-h0",
+  "private_key_id": "5394ad9a9e9e715e501775a7ac152f7190bef583",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDijD7Sij1N5Ms0\n58W9rGO7l8jzbBX+Lau+7uZSP9uMxrk+/cWGGCUfxX6MM/afvwVwG6aUhwUMxRs9\nrbuCMym4hjM2fKfCvBja6xB2I+wYvRQVKiGVwpkiQ8zdAOQyHHUeK+JXj5HNKNUv\nUcCV5norZwPOQPXFYV8LSBndX111AVNBk5ZybFzSFmwrsLScYgvk+9ZcHmbNLeF4\nytRBVXS+d0EzTDLKztWmyOoN3SVCLa73bl6Xcs4yvEUNaAkDq5VSZSHzi/o/Imhu\nHhUEUxt1nKWVSQy3SrkPPOsYsGl9u7Kb1/OrndYjAlTzk62Qqd0vtpX/IPzUR+we\ntyKTT78BAgMBAAECggEACIEY7KC0MMPeyEjOY1KLgzkX7zdb/f4rPSV3r5e7v1BI\nbO/Be0lVv22+VIyw0d9YWL8uT34Kt6eAix4F9MXEklY1/vIf/rnpOZ1AXBxOGmxN\nStwZhactRhwtyRAQVjyQ6EXfycdXGFCo7A1RbER0ypij4RlkKyQpbrbRWGjiN72i\nZntatHvfh/8kAsame3KiuC86B1ajHZnSJUyT+9iXBYQwLqC33MUZNCYoFuK+pRWI\n5DhBMrqBp/q8UyIGQuIA3UgMdR2SAlLNyLaBWjYQ71534OTh1I+yINtMfOc6itjZ\nN0j0ASucK/Ij7RMHstQFu5gbHFPXlVeLnEASF8QxJwKBgQD6XOzCmvIsZsIVkN4z\nvaqSzag4pfxL6sb7WO8Q3O74taBUVCEGZ0z3CwQLtONur0D6ho0gn3DoB9TJ6vSg\n9tFsScx30ADKXjcv1nq5mSfmAghrxpqhAgMTL1mjK5cXiIdLaFAREX27rern+Ya+\nGTEWnHJmP4n3ke88v2TPvzqklwKBgQDnpg037Xo45WxxvObfNKgFNOJ7m7y9btFF\nxqPfPFAgNaquExYsCwcDts3PYEtKnT4LydoAUPA4opCYearGvDtTIU1EXtG1Qd5K\nEoSRBUmCVvkedFT1pJNqyBDtM4YMj4RHRrqv9wmKCVMHkTd3fDfWT4G3K2GuyQBc\ns8NdO940JwKBgQDysyBFKoV3K4ob89qjl8qCE2FuwOGKCqcoQzdFRpdWfGNXPFLj\nbUJ7/a7HVmxfAP9hnQu0Qzvlgqnxr5XDcGDls8jFoNsTUi/3bNh9kQ3Pd8sIB3gg\net3WPEGN3xTSGGTnYdC0KxuS027zv72yDKO8gp6XpiKt30dmwTcN+Rf1MwKBgQCW\n9AN7JZrXBtJjT9kXLQYs1micakFVJKjlEmvpZjFEvBQsea2iJ9F7Xx3A/Jwz1EIB\nhpk0SYoxLeaSJf7eoPz70CC85Bk+R90mYejXZB2h/TE74k0XAhc6p4M4P7Ij70Yg\n+HthfddOh4L+1GfTyjPMyWTbSz7NmphM0KwHzqKfUwKBgQDplU3kBGw/0wzSr5Dq\n9XgfpMRRvJ830kKK7ioDzR+dssVnP5y9OZO6S7XKd+72GMMQ3euXikz4nVbPC2Jq\n/TQIaQBJHTE0H3HVy89TIIxz108BP5OdFhAMk4z3pqWYTnU3MRp7oBxCuxNjxF79\nykeMNpk+f83mnhRxZPzvffpQIA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "github@custom-unison-443618-h0.iam.gserviceaccount.com",
+  "client_id": "110909381465157004294",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/github%40custom-unison-443618-h0.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
