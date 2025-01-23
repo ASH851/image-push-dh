@@ -27,6 +27,12 @@ jobs:
     - name: Set up Cloud SDK
       uses: 'google-github-actions/setup-gcloud@v2'
 
+    - name: Install GKE gcloud auth plugin
+      run: |
+        curl -Lo gke-gcloud-auth-plugin https://dl.google.com/cloudsdk/gke-gcloud-auth-plugin-linux-amd64.tar.gz
+        tar -xvzf gke-gcloud-auth-plugin-linux-amd64.tar.gz
+        sudo mv gke-gcloud-auth-plugin /usr/local/bin/
+
     - name: Configure Docker Auth
       run: |
         gcloud auth configure-docker us-central1-docker.pkg.dev
