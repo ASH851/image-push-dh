@@ -9,7 +9,7 @@ env:
   GKE_CLUSTER: my-cluster
   GKE_ZONE: us-central1
   DEPLOYMENT_NAME: website-deployment
-  IMAGE: my-repo
+  IMAGE: my-website
 
 jobs:
   setup-build-publish-deploy:
