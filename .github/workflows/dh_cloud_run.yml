@@ -1,44 +1,34 @@
-name: Deploy to GCP Cloud Run
+name: Deploy to GKE
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      # Step 1: Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Step 2: Set up Google Cloud SDK
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-
-      # Step 3: Authenticate Docker with Google Container Registry
-      - name: Authenticate Docker with GCR
-        run: |
-          echo "${{ secrets.GCP_CREDENTIALS }}" > /tmp/gcp-key.json
-          gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
-          gcloud auth configure-docker --quiet
-
-      # Step 4: Build and push the Docker image to Google Container Registry
-      - name: Build and push Docker image
-        run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/your-image-name:latest .
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/your-image-name:latest
-
-      # Step 5: Deploy to Cloud Run
-      - name: Deploy to Cloud Run
-        run: |
-          gcloud run deploy your-service-name \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/your-image-name:latest \
-            --platform managed \
-            --region us-central1 \
-            --allow-unauthenticated
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Google Cloud
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        project_id: ${{ secrets.GKE_PROJECT }}
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        export_default_credentials: true
+    
+    - name: Configure Docker
+      run: gcloud auth configure-docker
+    
+    - name: Build Docker Image
+      run: docker build -t gcr.io/${{ secrets.GKE_PROJECT }}/my-website:${{ github.sha }} .
+    
+    - name: Push to Google Container Registry
+      run: docker push gcr.io/${{ secrets.GKE_PROJECT }}/my-website:${{ github.sha }}
+    
+    - name: Deploy to GKE
+      run: |
+        gcloud container clusters get-credentials my-cluster --zone my-zone
+        kubectl set image deployment/my-deployment my-container=gcr.io/${{ secrets.GKE_PROJECT }}/my-website:${{ github.sha }}
