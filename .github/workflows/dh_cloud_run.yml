@@ -34,15 +34,19 @@ jobs:
       run: |
         gcloud auth configure-docker us-central1-docker.pkg.dev
 
+    - name: Set Timestamped Image Tag
+      run: echo "IMAGE_TAG=${{ github.sha }}-$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+
     - name: Build Docker Image
       run: |
-        docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/$IMAGE:${{ github.sha }} .
+        docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/$IMAGE:$IMAGE_TAG .
 
     - name: Push to Artifact Registry
       run: |
-        docker push us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/$IMAGE:${{ github.sha }}
+        docker push us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/$IMAGE:$IMAGE_TAG
 
     - name: Deploy to GKE
       run: |
         gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE
-        kubectl set image deployment/website-deployment my-website-sha256-1=us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/$IMAGE:${{ github.sha }} --namespace default
+        kubectl set image deployment/website-deployment my-website=us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/$IMAGE:$IMAGE_TAG --namespace default
+
