@@ -38,7 +38,7 @@ jobs:
       run: |
         gcloud auth configure-docker us-central1-docker.pkg.dev
 
-    # Step 5: Build Docker Image and Push to Artifact Registry using the GitHub Action module
+    # Step 5: Build Docker Image using GitHub Actions Build and Push Module
     - name: Build and Push Docker Image to Artifact Registry
       uses: google-github-actions/build-and-push-docker-image@v0
       with:
