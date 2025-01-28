@@ -1,15 +1,14 @@
-name: Deploy to GKE
+name: Deploy to Cloud Run
 
 on:
   push:
     branches: [ main ]
 
 env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: my-cluster
-  GKE_ZONE: us-central1
-  DEPLOYMENT_NAME: website-deployment
-  IMAGE: my-website
+  PROJECT_ID: ${{ secrets.GCP_PROJECT }}
+  REGION: us-central1
+  SERVICE_NAME: lamp
+  IMAGE: lamp-image
 
 jobs:
   setup-build-publish-deploy:
@@ -19,27 +18,21 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Google Cloud Auth
-      uses: 'google-github-actions/auth@v2'
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
       with:
         credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-    - name: Set up Cloud SDK
-      uses: 'google-github-actions/setup-gcloud@v2'
+    - name: Set up gcloud CLI
+      uses: google-github-actions/setup-gcloud@v2
       with:
-        project_id: ${{ secrets.GKE_PROJECT }}
-        install_components: 'kubectl'
+        project_id: ${{ env.PROJECT_ID }}
+        install_components: 'beta'
 
-    - name: Configure Docker Auth
-      run: |
-        gcloud auth configure-docker us-central1-docker.pkg.dev
-    - name: Build Docker Image
-      run: |
-        docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/$IMAGE:${{ github.sha }} .
-    - name: Push to Artifact Registry
-      run: |
-        docker push us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/$IMAGE:${{ github.sha }}
-    - name: Deploy to GKE
-      run: |
-        gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE
-        kubectl set image deployment/website-deployment my-website-sha256-1=us-central1-docker.pkg.dev/$PROJECT_ID/my-repo/$IMAGE:${{ github.sha }} --namespace default
+    - name: Build and Push Docker Image to Artifact Registry
+      uses: google-github-actions/deploy-cloudrun@v2
+      with:
+        project_id: ${{ env.PROJECT_ID }}
+        region: ${{ env.REGION }}
+        service: ${{ env.SERVICE_NAME }}
+        image: us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/my-repo/${{ env.IMAGE }}:${{ github.sha }}
