@@ -40,7 +40,7 @@ jobs:
 
     # Step 5: Build Docker Image using GitHub Actions Build and Push Module
     - name: Build and Push Docker Image to Artifact Registry
-      uses: google-github-actions/build-and-push-docker-image@v0
+      uses: google-github-actions/build-and-push-docker-image@v2
       with:
         image: us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
         dockerfile: ./Dockerfile
