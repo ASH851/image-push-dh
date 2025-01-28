@@ -38,18 +38,16 @@ jobs:
       run: |
         gcloud auth configure-docker us-central1-docker.pkg.dev
 
-    # Step 5: Build Docker Image
-    - name: Build Docker Image
-      run: |
-        IMAGE_URI=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
-        docker build -t $IMAGE_URI .
+    # Step 5: Build Docker Image and Push to Artifact Registry using the GitHub Action module
+    - name: Build and Push Docker Image to Artifact Registry
+      uses: google-github-actions/build-and-push-docker-image@v0
+      with:
+        image: us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+        dockerfile: ./Dockerfile
+        context: .
+        push: true
 
-    # Step 6: Push Docker Image to Artifact Registry
-    - name: Push Docker Image to Artifact Registry
-      run: |
-        docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
-
-    # Step 7: Deploy Docker Image to Cloud Run
+    # Step 6: Deploy Docker Image to Cloud Run
     - name: Deploy to Cloud Run
       uses: google-github-actions/deploy-cloudrun@v2
       with:
@@ -60,3 +58,12 @@ jobs:
         env_vars_update_strategy: merge
         secrets_update_strategy: merge
         no_traffic: false
+
+    # Step 7: Allow Unauthenticated Access to Cloud Run
+    - name: Allow Unauthenticated Access to Cloud Run
+      run: |
+        gcloud run services add-iam-policy-binding ${{ env.SERVICE_NAME }} \
+          --member="allUsers" \
+          --role="roles/run.invoker" \
+          --region=${{ env.REGION }} \
+          --project=${{ env.PROJECT_ID }}
