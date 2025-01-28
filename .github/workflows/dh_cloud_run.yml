@@ -8,31 +8,46 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT }}
   REGION: us-central1
   SERVICE_NAME: lamp
+  REPOSITORY: my-repo
   IMAGE: lamp-image
 
 jobs:
-  setup-build-publish-deploy:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
+    # Step 1: Check out the repository
     - name: Checkout Repository
       uses: actions/checkout@v4
 
+    # Step 2: Authenticate to Google Cloud
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v2
       with:
         credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
+    # Step 3: Set up gcloud CLI
     - name: Set up gcloud CLI
       uses: google-github-actions/setup-gcloud@v2
       with:
         project_id: ${{ env.PROJECT_ID }}
         install_components: 'beta'
 
-    - name: Build and Push Docker Image to Artifact Registry
+    # Step 4: Build and Push Docker Image to Artifact Registry
+    - name: Build and Push Docker Image
+      run: |
+        IMAGE_URI=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+        docker build -t $IMAGE_URI .
+        docker push $IMAGE_URI
+
+    # Step 5: Deploy to Cloud Run
+    - name: Deploy to Cloud Run
       uses: google-github-actions/deploy-cloudrun@v2
       with:
         project_id: ${{ env.PROJECT_ID }}
         region: ${{ env.REGION }}
         service: ${{ env.SERVICE_NAME }}
-        image: us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/my-repo/${{ env.IMAGE }}:${{ github.sha }}
+        image: us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+        env_vars_update_strategy: merge
+        secrets_update_strategy: merge
+        no_traffic: false
