@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Check out the repository
+    # Step 1: Checkout the repository
     - name: Checkout Repository
       uses: actions/checkout@v4
 
@@ -33,14 +33,23 @@ jobs:
         project_id: ${{ env.PROJECT_ID }}
         install_components: 'beta'
 
-    # Step 4: Build and Push Docker Image to Artifact Registry
-    - name: Build and Push Docker Image
+    # Step 4: Set up Docker authentication for Artifact Registry
+    - name: Set up Docker authentication
+      run: |
+        gcloud auth configure-docker us-central1-docker.pkg.dev
+
+    # Step 5: Build Docker Image
+    - name: Build Docker Image
       run: |
         IMAGE_URI=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
         docker build -t $IMAGE_URI .
-        docker push $IMAGE_URI
 
-    # Step 5: Deploy to Cloud Run
+    # Step 6: Push Docker Image to Artifact Registry
+    - name: Push Docker Image to Artifact Registry
+      run: |
+        docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+
+    # Step 7: Deploy Docker Image to Cloud Run
     - name: Deploy to Cloud Run
       uses: google-github-actions/deploy-cloudrun@v2
       with:
