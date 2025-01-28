@@ -6,7 +6,7 @@ COPY index.html /usr/share/nginx/html/index.html
 # Ensure Nginx listens on port 8080 (required by Cloud Run)
 ENV PORT 8080
 
-# Expose the port (this can be omitted, as Cloud Run will use the PORT environment variable)
+# Expose the port (this can be used, as Cloud Run will use the PORT environment variable)
 EXPOSE 8080
 
 # Override the default nginx configuration to listen on the correct port
